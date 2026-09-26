@@ -1,13 +1,16 @@
 "use client";
 import React from "react";
 import Script from "next/script";
-import { initiate } from "@/actions/useractions";
+import { initiate, fetchuser, fetchpayments } from "@/actions/useractions";
 import { useState } from "react";
 // REMOVE: import Razorpay from "razorpay";
 import { useSession } from "next-auth/react";
+import { useEffect } from "react";
 
 const PaymentPage = ({ username }) => {
   const [paymentform, setpaymentform] = useState({});
+  const [currentUser, setcurrentUser] = useState({})
+  const [payments, setpayments] = useState([])
 
   const pay = async (amount) => {
     let a = await initiate(amount, username, paymentform);
@@ -21,7 +24,7 @@ const PaymentPage = ({ username }) => {
       description: "Test Transaction",
       image: "https://example.com/your_logo",
       order_id: orderID,
-      callback_url: `${process.env.URL}/api/razorpay`,
+      callback_url: `${process.env.NEXT_PUBLIC_URL}/api/razorpay`,
       prefill: {
         name: paymentform.name || "",
         email: "",
@@ -38,6 +41,20 @@ const PaymentPage = ({ username }) => {
     rzp1.open();
   };
 
+  const getData = async () => {
+    const u = await fetchuser(username);
+    const dbpayments = await fetchpayments(username);
+    return { user: u, payments: dbpayments };
+  };
+  
+  useEffect(() => {
+    getData().then(({ user, payments }) => {
+      setcurrentUser(user);
+      setpayments(payments);
+    });
+  }, []);
+  
+
   const handleChange = (e) => {
     setpaymentform({
       ...paymentform,
@@ -47,7 +64,6 @@ const PaymentPage = ({ username }) => {
 
   return (
     <>
-      <button id="rzp-button1">Pay</button>
       <Script src="https://checkout.razorpay.com/v1/checkout.js"></Script>
 
       <div className="text-[#44210d] w-full relative">
@@ -84,36 +100,26 @@ const PaymentPage = ({ username }) => {
           <div className="supporters w-1/2 bg-[#bea6a0] p-3 text-[#44210d] rounded-2xl">
             <h2 className="text-xl text-center font-bold">Supporters</h2>
             <ul className="mx-4 mt-4">
-              <li className="my-2 font-medium flex gap-2">
-                <img
-                  src="/user_icon-icons.com_57997.png"
-                  className="bg-[#bea6a0] p-1 rounded-full"
-                  width={20}
-                  alt=""
-                />{" "}
-                Abdullah Donated <span className="font-bold">$20</span> with a
-                message &quot;I Support you bro. Lots of Love&quot;
-              </li>
-              <li className="my-2 font-medium flex gap-2">
-                <img
-                  src="/user_icon-icons.com_57997.png"
-                  className="bg-[#bea6a0] p-1 rounded-full"
-                  width={20}
-                  alt=""
-                />{" "}
-                Abdullah Donated <span className="font-bold">$20</span> with a
-                message &quot;I Support you bro. Lots of Love&quot;
-              </li>
-              <li className="my-2 font-medium flex gap-2">
-                <img
-                  src="/user_icon-icons.com_57997.png"
-                  className="bg-[#bea6a0] p-1 rounded-full"
-                  width={20}
-                  alt=""
-                />{" "}
-                Abdullah Donated <span className="font-bold">$20</span> with a
-                message &quot;I Support you bro. Lots of Love&quot;
-              </li>
+              {payments.map((p,i) => {
+                return (
+                  <li key={i} className="my-2 font-medium flex gap-2">
+                    <img
+                      src="/user_icon-icons.com_57997.png"
+                      className="bg-[#bea6a0] p-1 rounded-full"
+                      width={20}
+                      alt=""
+                    />{" "}
+                    {p.name || "Anonymous"} Donated{" "}
+                    <span className="font-bold">₹{p.amount}</span>{" "}
+                    {p.message && (
+                      <>
+                        with a message &quot;{p.message}&quot;
+                      </>
+                    ) || "with lots of love"}
+                  </li>
+                );
+              })
+              }
             </ul>
           </div>
           <div className="makePayment w-1/2 bg-[#bea6a0] p-4 text-[#44210d] rounded-2xl">
@@ -152,7 +158,7 @@ const PaymentPage = ({ username }) => {
               <button
                 className="bg-[#5f3b26] hover:bg-[#9e7761] text-[#e5c5b4] text-lg p-2 rounded-2xl hover:cursor-pointer"
                 onClick={() => {
-                  pay(5000);
+                  pay(50);
                 }}
               >
                 Pay ₹50
@@ -160,7 +166,7 @@ const PaymentPage = ({ username }) => {
               <button
                 className="bg-[#5f3b26] hover:bg-[#9e7761] text-[#e5c5b4] text-lg p-2 rounded-2xl hover:cursor-pointer"
                 onClick={() => {
-                  pay(10000);
+                  pay(100);
                 }}
               >
                 Pay ₹100
@@ -168,7 +174,7 @@ const PaymentPage = ({ username }) => {
               <button
                 className="bg-[#5f3b26] hover:bg-[#9e7761] text-[#e5c5b4] text-lg p-2 rounded-2xl hover:cursor-pointer"
                 onClick={() => {
-                  pay(20000);
+                  pay(200);
                 }}
               >
                 Pay ₹200

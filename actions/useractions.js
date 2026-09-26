@@ -8,7 +8,7 @@ import User from "@/models/User";
 export const initiate = async (amount, to_username, paymentform) => {
   await connectDb();
   var instance = new Razorpay({
-    key_id: process.env.KEY_ID,
+    key_id: process.env.NEXT_PUBLIC_KEY_ID,
     key_secret: process.env.KEY_SECRET
   });
 
@@ -29,4 +29,18 @@ export const initiate = async (amount, to_username, paymentform) => {
   })
 
   return x
+};
+
+export const fetchuser = async (username) => {
+  await connectDb();
+  const user = await User.findOne({ Username: username }).lean();
+  return user ? JSON.parse(JSON.stringify(user)) : null;
+};
+
+export const fetchpayments = async (username) => {
+  await connectDb();
+  const payments = await Payment.find({ to_user: username })
+    .sort({ amount: -1 })
+    .lean();
+  return JSON.parse(JSON.stringify(payments));
 };
