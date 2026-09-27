@@ -9,8 +9,8 @@ import { useEffect } from "react";
 
 const PaymentPage = ({ username }) => {
   const [paymentform, setpaymentform] = useState({});
-  const [currentUser, setcurrentUser] = useState({})
-  const [payments, setpayments] = useState([])
+  const [currentUser, setcurrentUser] = useState({});
+  const [payments, setpayments] = useState([]);
 
   const pay = async (amount) => {
     let a = await initiate(amount, username, paymentform);
@@ -46,14 +46,13 @@ const PaymentPage = ({ username }) => {
     const dbpayments = await fetchpayments(username);
     return { user: u, payments: dbpayments };
   };
-  
+
   useEffect(() => {
     getData().then(({ user, payments }) => {
       setcurrentUser(user);
       setpayments(payments);
     });
   }, []);
-  
 
   const handleChange = (e) => {
     setpaymentform({
@@ -69,14 +68,14 @@ const PaymentPage = ({ username }) => {
       <div className="text-[#44210d] w-full relative">
         <img
           className="object-cover w-full h-100 "
-          src="/77f738bf86188c93746c3a91c80ee32b.jpg"
+          src={currentUser.coverPic || "/77f738bf86188c93746c3a91c80ee32b.jpg"}
           alt=""
         />
         <div className="pfp absolute -bottom-17 right-[45.5%] ">
           <img
             width={150}
             className="rounded-2xl border-4 border-red-900"
-            src="/wallpaper-black.gif"
+            src={currentUser.profilePic ? `/${currentUser.profilePic}` : "/wallpaper-black.gif"}
             alt=""
           />
         </div>
@@ -100,31 +99,37 @@ const PaymentPage = ({ username }) => {
           <div className="supporters w-1/2 bg-[#bea6a0] p-3 text-[#44210d] rounded-2xl">
             <h2 className="text-xl text-center font-bold">Supporters</h2>
             <ul className="mx-4 mt-4">
-              {payments.map((p,i) => {
-                return (
-                  <li key={i} className="my-2 font-medium flex gap-2">
-                    <img
-                      src="/user_icon-icons.com_57997.png"
-                      className="bg-[#bea6a0] p-1 rounded-full"
-                      width={20}
-                      alt=""
-                    />{" "}
-                    {p.name || "Anonymous"} Donated{" "}
-                    <span className="font-bold">₹{p.amount}</span>{" "}
-                    {p.message && (
-                      <>
-                        with a message &quot;{p.message}&quot;
-                      </>
-                    ) || "with lots of love"}
-                  </li>
-                );
-              })
-              }
+              {payments.filter((p) => p.done === true).length === 0 ? (
+                <li className="my-2 font-medium text-center">
+                  No payments yet
+                </li>
+              ) : (
+                payments
+                  .filter((p) => p.done === true)
+                  .map((p, i) => {
+                    return (
+                      <li key={i} className="my-2 font-medium flex gap-2">
+                        <img
+                          src="/user_icon-icons.com_57997.png"
+                          className="bg-[#bea6a0] p-1 rounded-full"
+                          width={20}
+                          alt=""
+                        />{" "}
+                        {p.name || "Anonymous"} Donated{" "}
+                        <span className="font-bold">₹{p.amount}</span>{" "}
+                        {(p.message && (
+                          <>with a message &quot;{p.message}&quot;</>
+                        )) ||
+                          "with lots of love"}
+                      </li>
+                    );
+                  })
+              )}
             </ul>
           </div>
           <div className="makePayment w-1/2 bg-[#bea6a0] p-4 text-[#44210d] rounded-2xl">
             <h2 className="text-xl text-center font-bold">Make a Payment</h2>
-            <form className="flex flex-col gap-3 mt-4 mb-2">
+            <div className="flex flex-col gap-3 mt-4 mb-2">
               <input
                 onChange={handleChange}
                 value={paymentform.amount || ""}
@@ -148,10 +153,16 @@ const PaymentPage = ({ username }) => {
                 placeholder="Message (Optional)"
                 className="p-2 rounded-2xl border-2 border-[#44210d] focus:outline-none focus:border-[#9e7761]"
               ></textarea>
-              <button className="bg-[#5f3b26] hover:bg-[#9e7761] text-[#e5c5b4] text-lg p-2 rounded-2xl hover:cursor-pointer">
+              <button
+                type="button"
+                onClick={() => {
+                  pay(paymentform.amount);
+                }}
+                className="bg-[#5f3b26] hover:bg-[#9e7761] text-[#e5c5b4] text-lg p-2 rounded-2xl hover:cursor-pointer"
+              >
                 Pay
               </button>
-            </form>
+            </div>
             {/* Choose from these amounts */}
             <span className="m-3 text-xl">Or</span>
             <div className="def-amt-btns flex gap-4 mt-2">

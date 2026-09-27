@@ -44,3 +44,38 @@ export const fetchpayments = async (username) => {
     .lean();
   return JSON.parse(JSON.stringify(payments));
 };
+
+export const updateProfile = async (data, oldusername) => {
+  await connectDb();
+  const ndata = Object.fromEntries(data);
+
+  try {
+    if (oldusername !== ndata.username) {
+      const existing = await User.findOne({ Username: ndata.username });
+      if (existing) {
+        return { error: "Username already exists" };
+      }
+    }
+
+    const result = await User.updateOne(
+      { email: ndata.email },
+      {
+        $set: {
+          name: ndata.name,
+          Username: ndata.username,
+          profilePic: ndata.profilepic,
+          coverPic: ndata.coverpic,
+        },
+      }
+    );
+
+    if (result.matchedCount === 0) {
+      return { error: "User not found — could not update" };
+    }
+
+    return { success: true };
+  } catch (err) {
+    console.error("updateProfile error:", err);
+    return { error: err.message || "Something went wrong" };
+  }
+};
