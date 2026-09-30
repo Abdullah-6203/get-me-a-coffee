@@ -6,18 +6,23 @@ import { useState } from "react";
 // REMOVE: import Razorpay from "razorpay";
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
+import { ToastContainer } from "react-toastify";
+import { useSearchParams } from "next/navigation";
+
+
 
 const PaymentPage = ({ username }) => {
   const [paymentform, setpaymentform] = useState({});
   const [currentUser, setcurrentUser] = useState({});
   const [payments, setpayments] = useState([]);
+  const searchParams = useSearchParams();
 
   const pay = async (amount) => {
     let a = await initiate(amount, username, paymentform);
     let orderID = a.id;
 
     var options = {
-      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+      key: currentUser.razorpayid,
       amount: amount,
       currency: "INR",
       name: "Get Me A Coffee",
@@ -54,6 +59,23 @@ const PaymentPage = ({ username }) => {
     });
   }, []);
 
+  useEffect(() => {
+    if(searchParams.get("paymentdone") == "true" &&session){
+      toast.success('🦄 Wow so easy!', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+        });
+    }
+  }, [session])
+  
+
   const handleChange = (e) => {
     setpaymentform({
       ...paymentform,
@@ -63,19 +85,45 @@ const PaymentPage = ({ username }) => {
 
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+
+
       <Script src="https://checkout.razorpay.com/v1/checkout.js"></Script>
 
       <div className="text-[#44210d] w-full relative">
         <img
           className="object-cover w-full h-100 "
-          src={currentUser.coverPic || "/77f738bf86188c93746c3a91c80ee32b.jpg"}
+          src={
+            currentUser.coverPic
+              ? currentUser.profilePic.startsWith("http")
+                ? currentUser.coverPic
+                : `/${currentUser.coverPic}`
+              : "/77f738bf86188c93746c3a91c80ee32b.jpg"
+          }
           alt=""
         />
         <div className="pfp absolute -bottom-17 right-[45.5%] ">
           <img
             width={150}
             className="rounded-2xl border-4 border-red-900"
-            src={currentUser.profilePic ? `/${currentUser.profilePic}` : "/wallpaper-black.gif"}
+            src={
+              currentUser.profilePic
+                ? currentUser.profilePic.startsWith("http")
+                  ? currentUser.profilePic
+                  : `/${currentUser.profilePic}`
+                : "/wallpaper-black.gif"
+            }
             alt=""
           />
         </div>

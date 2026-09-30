@@ -65,6 +65,8 @@ export const updateProfile = async (data, oldusername) => {
           Username: ndata.username,
           profilePic: ndata.profilepic,
           coverPic: ndata.coverpic,
+          razorpayid: ndata.razorpayid,
+          razorpaysecret: ndata.razorpaysecret,
         },
       }
     );
