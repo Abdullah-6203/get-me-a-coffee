@@ -7,18 +7,22 @@ import User from "@/models/User";
 
 export const initiate = async (amount, to_username, paymentform) => {
   await connectDb();
-  var instance = new Razorpay({
-    key_id: process.env.NEXT_PUBLIC_KEY_ID,
-    key_secret: process.env.KEY_SECRET
+
+  const user = await User.findOne({ Username: to_username });
+  if (!user || !user.razorpayid || !user.razorpaysecret) {
+    throw new Error("This creator hasn't set up payments yet.");
+  }
+
+  const instance = new Razorpay({
+    key_id: user.razorpayid,
+    key_secret: user.razorpaysecret,
   });
 
-  let options = {
+  const options = {
     amount: Number.parseInt(amount) * 100,
     currency: "INR",
-  }
-  let x = await instance.orders.create(options);
-
-  //Create a payment object that shows a pending payment
+  };
+  const x = await instance.orders.create(options);
 
   await Payment.create({
     order_ID: x.id,
@@ -26,9 +30,9 @@ export const initiate = async (amount, to_username, paymentform) => {
     to_user: to_username,
     name: paymentform.name,
     message: paymentform.message,
-  })
+  });
 
-  return x
+  return x;
 };
 
 export const fetchuser = async (username) => {

@@ -6,16 +6,20 @@ import { useState } from "react";
 // REMOVE: import Razorpay from "razorpay";
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useSearchParams } from "next/navigation";
 
 
 
 const PaymentPage = ({ username }) => {
+  // const { data: session } = useSession();
+
   const [paymentform, setpaymentform] = useState({});
   const [currentUser, setcurrentUser] = useState({});
   const [payments, setpayments] = useState([]);
   const searchParams = useSearchParams();
+
 
   const pay = async (amount) => {
     let a = await initiate(amount, username, paymentform);
@@ -60,8 +64,8 @@ const PaymentPage = ({ username }) => {
   }, []);
 
   useEffect(() => {
-    if(searchParams.get("paymentdone") == "true" &&session){
-      toast.success('🦄 Wow so easy!', {
+    if(searchParams.get("paymentdone") == "true"){
+      toast.success('Thanks for the contribution!!', {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: true,
@@ -70,10 +74,11 @@ const PaymentPage = ({ username }) => {
         draggable: true,
         progress: undefined,
         theme: "light",
-        transition: Bounce,
         });
     }
-  }, [session])
+  }, [])
+
+  
   
 
   const handleChange = (e) => {

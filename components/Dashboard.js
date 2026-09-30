@@ -3,6 +3,9 @@ import React, { useEffect, useState } from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { fetchuser, updateProfile } from "@/actions/useractions";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 const Dashboard = () => {
   const router = useRouter();
@@ -31,24 +34,50 @@ const Dashboard = () => {
     setform({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+ 
+
+const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!session?.user?.name) {
-      alert("Session not ready yet, please try again in a moment.");
-      return;
+        toast.error("Session not ready yet, please try again in a moment.", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            theme: "light",
+        });
+        return;
     }
 
     const formData = new FormData(e.target);
     const result = await updateProfile(formData, session.user.name);
 
     if (result?.error) {
-      alert(result.error);
+        toast.error(result.error, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            theme: "light",
+        });
     } else {
-      await update();
-      alert("Profile Updated Successfully");
+        await update();
+        toast.success("Profile Updated Successfully", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            theme: "light",
+        });
     }
-  };
+};
 
   // Don't render the form at all until session status is known,
   // avoids any flash of unguarded state before redirect/fetch happens
@@ -66,6 +95,8 @@ const Dashboard = () => {
 
   return (
     <>
+      
+
       <div className="container mx-auto py-5 px-6 ">
         <h1 className="text-center my-5 text-3xl font-bold">
           Welcome to your Dashboard
