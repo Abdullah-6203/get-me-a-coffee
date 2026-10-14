@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -10,12 +11,17 @@ export default function Home() {
         GetMeACoffee connects coffee lovers with the baristas and shops that make their mornings better — one cup, one tip, one thank-you at a time.
         </p>
         <div className="flex gap-2">
+          <Link href={"/login"}>
           <button className="text-[#44210d] text-lg bg-[#b5907b] p-2 rounded-2xl hover:bg-[#9e7761] hover:cursor-pointer">
             Support →
           </button>
+          </Link>
+
+          <Link href={"/about"}>
           <button className="text-[#44210d] text-lg  p-2 rounded-2xl hover:underline hover:cursor-pointer">
             Read More!!
           </button>
+          </Link>
         </div>
       </div>
       <div className="bg-[#bea6a0] h-1 opacity-50"></div>

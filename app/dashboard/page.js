@@ -1,4 +1,3 @@
-
 import React from "react";
 import Dashboard from "../../components/Dashboard";
 
@@ -11,3 +10,8 @@ const DashboardPage = () => {
 };
 
 export default DashboardPage;
+
+export const metadata = {
+  title: 'Dashboard',
+}
+

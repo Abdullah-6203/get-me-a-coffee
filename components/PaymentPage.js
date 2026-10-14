@@ -147,7 +147,7 @@ const PaymentPage = ({ username }) => {
           {/* Show list of all the supporters as a leaderboard */}
 
           <div className="supporters w-1/2 bg-[#bea6a0] p-3 text-[#44210d] rounded-2xl">
-            <h2 className="text-xl text-center font-bold">Supporters</h2>
+            <h2 className="text-xl text-center font-bold">Top 10 Supporters</h2>
             <ul className="mx-4 mt-4">
               {payments.filter((p) => p.done === true).length === 0 ? (
                 <li className="my-2 font-medium text-center">

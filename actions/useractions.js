@@ -45,6 +45,7 @@ export const fetchpayments = async (username) => {
   await connectDb();
   const payments = await Payment.find({ to_user: username })
     .sort({ amount: -1 })
+    .limit(10)
     .lean();
   return JSON.parse(JSON.stringify(payments));
 };
