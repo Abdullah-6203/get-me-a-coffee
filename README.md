@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# ☕ GetMeACoffee
 
-## Getting Started
+A full-stack creator support platform built with Next.js that allows creators to receive contributions from their audience, along with personalized messages.
 
-First, run the development server:
+🔗 **Live Demo:** [GetMeACoffee](https://get-me-a-coffee-psi.vercel.app)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 📌 About the Project
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+GetMeACoffee is a web application inspired by creator-support platforms. It allows creators to set up personalized profiles and receive financial contributions from supporters.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+The project focuses on implementing authentication, database operations, payment integration, and deployment in a modern full-stack web application.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## ✨ Features
 
-## Learn More
+- **GitHub Authentication** — Sign in using GitHub OAuth with NextAuth.js.
+- **Personalized Creator Profiles** — Custom usernames and profile information.
+- **Payment Integration** — Razorpay integration for creating payment orders.
+- **Supporter Messages** — Supporters can include a name and message with their contribution.
+- **Database Integration** — MongoDB Atlas for persistent data storage using Mongoose.
+- **Responsive UI** — Interface styled with Tailwind CSS.
+- **Cloud Deployment** — Deployed using Vercel.
 
-To learn more about Next.js, take a look at the following resources:
+## 🛠️ Tech Stack
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Technology | Purpose |
+|---|---|
+| Next.js | Full-stack React framework |
+| React | User interface |
+| Tailwind CSS | Styling and responsive layouts |
+| NextAuth.js | GitHub authentication |
+| MongoDB Atlas | Cloud database |
+| Mongoose | MongoDB object modeling |
+| Razorpay | Payment order integration |
+| Vercel | Deployment and hosting |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## ⚙️ Getting Started
