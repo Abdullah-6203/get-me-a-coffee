@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import React from "react";
 import Script from "next/script";
@@ -9,6 +10,7 @@ import { useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useSearchParams } from "next/navigation";
+import { notFound } from "next/navigation";
 
 
 
@@ -78,9 +80,6 @@ const PaymentPage = ({ username }) => {
     }
   }, [])
 
-  
-  
-
   const handleChange = (e) => {
     setpaymentform({
       ...paymentform,
@@ -110,8 +109,8 @@ const PaymentPage = ({ username }) => {
         <img
           className="object-cover w-full h-100 "
           src={
-            currentUser.coverPic
-              ? currentUser.profilePic.startsWith("http")
+            currentUser?.coverPic
+              ? currentUser.coverPic.startsWith("http")
                 ? currentUser.coverPic
                 : `/${currentUser.coverPic}`
               : "/77f738bf86188c93746c3a91c80ee32b.jpg"
@@ -123,7 +122,7 @@ const PaymentPage = ({ username }) => {
             width={150}
             className="rounded-2xl border-4 border-red-900"
             src={
-              currentUser.profilePic
+              currentUser?.profilePic
                 ? currentUser.profilePic.startsWith("http")
                   ? currentUser.profilePic
                   : `/${currentUser.profilePic}`
@@ -136,14 +135,12 @@ const PaymentPage = ({ username }) => {
       <div className="info flex justify-center items-center flex-col my-20 ">
         <span className="text-2xl font-medium">@{username}</span>
         <div className="font-light">
-          Creating Graphic Designs For Coffee Shops
+          Let&apos;s Help {username} Grow
         </div>
         <div className="flex items-center justify-center gap-2 font-light">
-          <span>9,102 Members</span>
+          <span>{payments.length} Payments Recieved</span>
           <span className="font-bold text-2xl">·</span>
-          <span>82 Posts</span>
-          <span className="font-bold text-2xl">·</span>
-          <span>$15,290/release</span>
+          <span>₹{payments.reduce((a,b)=>a+b.amount, 0)}  Raised So far</span>
         </div>
 
         <div className="payment flex gap-3 w-[80%] mt-10">
