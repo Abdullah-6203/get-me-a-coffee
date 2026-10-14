@@ -8,7 +8,7 @@ const connectDb = async () => {
   }
 
   try {
-    const conn = await mongoose.connect("mongodb://localhost:27017/Coffee", {
+    const conn = await mongoose.connect(process.env.MONGO_URI, {
       serverSelectionTimeoutMS: 5000, // fail fast instead of hanging 10s
     });
     isConnected = true;
