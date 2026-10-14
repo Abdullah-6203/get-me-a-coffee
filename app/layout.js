@@ -1,3 +1,4 @@
+
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
@@ -27,29 +28,27 @@ export default function RootLayout({ children }) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      
       <body className="min-h-screen flex flex-col">
-      <SessionWrapper>
-        <Navbar />
-        <div className="min-h-[85vh] bg-[#f7edeb]">
-          {children}
-          <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-        />
-        </div>
-        <Footer />
-      </SessionWrapper>
+        <SessionWrapper>
+          <Navbar />
+          <div className="flex-1 bg-[#f7edeb]">
+            {children}
+            <ToastContainer
+              position="top-right"
+              autoClose={5000}
+              hideProgressBar
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="light"
+            />
+          </div>
+          <Footer />
+        </SessionWrapper>
       </body>
-      
     </html>
   );
 }
