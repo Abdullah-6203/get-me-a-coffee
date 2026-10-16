@@ -33,7 +33,7 @@ const PaymentPage = ({ username }) => {
       description: "Test Transaction",
       image: "https://example.com/your_logo",
       order_id: orderID,
-      callback_url: `${process.env.NEXTAUTH_URL}/api/razorpay`,
+      callback_url: `${process.env.NEXT_PUBLIC_URL}/api/razorpay`,
       prefill: {
         name: paymentform.name || "",
         email: "",
